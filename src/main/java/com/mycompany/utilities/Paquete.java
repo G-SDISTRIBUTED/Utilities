@@ -5,15 +5,13 @@
  */
 package com.mycompany.utilities;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.io.Serializable;
+import com.google.gson.Gson;
 
 /**
  *
  * @author Pc
  */
-public class Paquete implements Serializable {
+public class Paquete{
     private String protocolo;
     private String parametros;
     private String tokenDeCliente;
@@ -38,25 +36,17 @@ public class Paquete implements Serializable {
         return parametros;
     }
     
+    public void cambiarTokenDeCliente(String tokenDeCliente) {
+        this.tokenDeCliente=tokenDeCliente;
+    }
+    
     public static Paquete deserializar(String mensaje) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(mensaje, Paquete.class);
-        } catch (IOException e) {
-            throw new RuntimeException("Error deserializando el paquete", e);
-        }
+        Gson gson = new Gson();
+        return gson.fromJson(mensaje, Paquete.class);
     }
 
     public static String serializar(Paquete paquete) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(paquete);
-        } catch (IOException e) {
-            throw new RuntimeException("Error serializando el paquete", e);
-        }
-    }
-
-    public void cambiarTokenDeCliente(String tokenDeCliente) {
-        this.tokenDeCliente=tokenDeCliente;
+        Gson gson = new Gson();
+        return gson.toJson(paquete);
     }
 }
